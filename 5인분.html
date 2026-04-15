@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GDP 대비 에너지 소비량 탐구 프로젝트</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Pretendard', sans-serif; line-height: 1.6; color: #333; background-color: #f0f2f5; margin: 0; padding: 0; }
+        header { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; text-align: center; padding: 4rem 1rem; }
+        section { max-width: 1100px; margin: 2rem auto; background: white; padding: 2.5rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h2 { color: #1e3c72; border-left: 5px solid #1e3c72; padding-left: 15px; margin-bottom: 1.5rem; }
+        .chart-container { position: relative; height: 500px; width: 100%; margin-bottom: 3rem; }
+        .highlight { color: #e74c3c; font-weight: bold; }
+        footer { text-align: center; padding: 2rem; color: #777; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>1인당 GDP와 에너지 소비량의 상관관계 분석</h1>
+    <p>2000년 vs 2022년: 세계 주요국 15개국 데이터 비교</p>
+</header>
+
+<section>
+    <h2>1. 탐구 이전 (사전 조사)</h2>
+    <p>본 프로젝트는 국가의 경제 규모(1인당 GDP) 성장과 에너지 소비량 사이의 흐름을 분석합니다.</p>
+    <ul>
+        <li><strong>가설:</strong> 경제가 성장하면 삶의 질이 높아져 에너지 소비도 늘어날 것이다.</li>
+        <li><strong>변수:</strong> 신기술 도입 및 에너지 효율화로 인해 경제는 성장하지만 에너지는 덜 쓰는 <span class="highlight">'탈동조화'</span> 현상이 나타날 수 있다.</li>
+        <li><strong>조사 대상:</strong> 북미, 유럽, 아시아, 남미, 아프리카를 대표하는 15개 국가를 선정함.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>2. 데이터 그래프 (꺾은선 비교)</h2>
+    <div class="chart-container">
+        <h3 style="text-align:center;"> 1인당 GDP 추이 ($)</h3>
+        <canvas id="gdpChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <h3 style="text-align:center;"> 1인당 에너지 소비량 추이</h3>
+        <canvas id="energyChart"></canvas>
+    </div>
+</section>
+
+<section>
+    <h2>3. 그래프 해석</h2>
+    <p>2000년(왼쪽 점)에서 2022년(오른쪽 점)으로 이어지는 선의 기울기를 분석한 결과입니다.</p>
+    <ul>
+        <li><strong>상승형 (아시아/신흥국):</strong> <span class="highlight">한국, 중국, 인도, 베트남, 인도네시아</span>는 두 그래프 모두 가파른 우상향을 보입니다. 경제 성장이 에너지 소비와 직결되어 있습니다.</li>
+        <li><strong>하락형 (유럽/선진국):</strong> <span class="highlight">독일, 영국, 프랑스, 이탈리아, 일본</span>은 GDP는 유지되거나 상승했음에도 에너지 소비량은 오히려 <strong>감소</strong>했습니다. 탄소 중립과 고효율 산업 구조의 영향입니다.</li>
+        <li><strong>거대 소비형:</strong> <span class="highlight">미국, 캐나다, 호주</span>는 경제 수준과 에너지 소비량 모두 압도적으로 높지만, 최근 들어 소비량을 소폭 줄여가는 효율화 단계에 진입했습니다.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>4. 결론</h2>
+    <p>데이터 분석을 통해 내린 최종 결론입니다.</p>
+    <ol>
+        <li>경제 성장이 반드시 에너지 소비의 무한한 증가를 의미하지는 않습니다.</li>
+        <li><strong>산업의 질적 변화:</strong> 제조업 중심국은 동반 상승하고, 서비스업/기술 중심국은 에너지 소비를 줄이며 성장합니다.</li>
+        <li><strong>미래 과제:</strong> 우리나라도 아시아 국가들의 '상승형' 궤도에서 유럽 선진국들의 '하락형' 궤도로 전환하기 위한 에너지 전환 정책이 필수적입니다.</li>
+    </ol>
+</section>
+
+<footer>
+    <p>&copy; 2026 웹 데이터 분석 프로젝트 - 1인당 GDP 및 에너지 데이터 분석</p>
+</footer>
+
+<script>
+    const labels = ['2000년', '2022년'];
+    const countries = [
+        { name: '미국', color: '#e74c3c', gdp: [36300, 76300], energy: [340, 310] },
+        { name: '한국', color: '#3498db', gdp: [12200, 32400], energy: [160, 230] },
+        { name: '중국', color: '#f1c40f', gdp: [950, 12700],  energy: [45, 125] },
+        { name: '독일', color: '#2ecc71', gdp: [23700, 48400], energy: [175, 135] },
+        { name: '영국', color: '#9b59b6', gdp: [28200, 46100], energy: [155, 115] },
+        { name: '일본', color: '#e67e22', gdp: [39100, 33800], energy: [170, 130] },
+        { name: '인도', color: '#1abc9c', gdp: [440, 2400],    energy: [18, 38] },
+        { name: '베트남', color: '#c0392b', gdp: [400, 4100],   energy: [10, 42] },
+        { name: '프랑스', color: '#34495e', gdp: [22700, 40900], energy: [165, 122] },
+        { name: '캐나다', color: '#d35400', gdp: [24200, 54900], energy: [380, 350] },
+        { name: '브라질', color: '#27ae60', gdp: [3700, 8900],   energy: [45, 62] },
+        { name: '호주', color: '#2980b9', gdp: [21600, 64500], energy: [240, 225] },
+        { name: '이탈리아', color: '#16a085', gdp: [20100, 34100], energy: [135, 105] },
+        { name: '인도네시아', color: '#f39c12', gdp: [780, 4500], energy: [25, 48] },
+        { name: '남아공', color: '#8e44ad', gdp: [3000, 6700], energy: [95, 102] }
+    ];
+
+    function createDataset(type) {
+        return countries.map(c => ({
+            label: c.name,
+            data: type === 'gdp' ? c.gdp : c.energy,
+            borderColor: c.color,
+            backgroundColor: c.color,
+            tension: 0.2,
+            borderWidth: 3,
+            pointRadius: 6
+        }));
+    }
+
+    const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'right', labels: { boxWidth: 12 } } },
+        scales: { y: { beginAtZero: true } }
+    };
+
+    new Chart(document.getElementById('gdpChart'), {
+        type: 'line',
+        data: { labels: labels, datasets: createDataset('gdp') },
+        options: commonOptions
+    });
+
+    new Chart(document.getElementById('energyChart'), {
+        type: 'line',
+        data: { labels: labels, datasets: createDataset('energy') },
+        options: commonOptions
+    });
+</script>
+</body>
+</html>
