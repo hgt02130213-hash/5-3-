@@ -13,6 +13,7 @@
         .chart-container { position: relative; height: 500px; width: 100%; margin-bottom: 3rem; }
         .highlight { color: #e74c3c; font-weight: bold; }
         footer { text-align: center; padding: 2rem; color: #777; }
+        #disqus_thread { max-width: 1100px; margin: 2rem auto; background: white; padding: 2.5rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
@@ -63,25 +64,18 @@
         <li><strong>미래 과제:</strong> 우리나라도 아시아 국가들의 '상승형' 궤도에서 유럽 선진국들의 '하락형' 궤도로 전환하기 위한 에너지 전환 정책이 필수적입니다.</li>
     </ol>
 </section>
+
 <div id="disqus_thread"></div>
 <script>
-    /**
-    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
-    /*
-    var disqus_config = function () {
-    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-    */
-    (function() { // DON'T EDIT BELOW THIS LINE
-    var d = document, s = d.createElement('script');
-    s.src = 'https://5inbun-gateun-3inbun-disqus-com.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
+    (function() { 
+        var d = document, s = d.createElement('script');
+        s.src = 'https://5inbun-gateun-3inbun-disqus-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
 <footer>
     <p>&copy; 2026 웹 데이터 분석 프로젝트 - 1인당 GDP 및 에너지 데이터 분석</p>
 </footer>
@@ -114,15 +108,42 @@
             backgroundColor: c.color,
             tension: 0.2,
             borderWidth: 3,
-            pointRadius: 6
+            pointRadius: 6,
+            pointHoverRadius: 10
         }));
     }
 
     const commonOptions = {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: { legend: { position: 'right', labels: { boxWidth: 12 } } },
-        scales: { y: { beginAtZero: true } }
+        interaction: {
+            mode: 'nearest',
+            intersect: false, // 선 근처에만 가도 정보가 뜸
+            axis: 'xy'
+        },
+        plugins: { 
+            legend: { position: 'right', labels: { boxWidth: 12 } },
+            tooltip: {
+                enabled: true,
+                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                titleColor: '#000',
+                bodyColor: '#000',
+                borderColor: '#ddd',
+                borderWidth: 1,
+                padding: 10,
+                callbacks: {
+                    label: function(context) {
+                        return ` ${context.dataset.label}: ${context.parsed.y.toLocaleString()}`;
+                    }
+                }
+            }
+        },
+        scales: { 
+            y: { 
+                beginAtZero: true,
+                ticks: { callback: function(value) { return value.toLocaleString(); } }
+            } 
+        }
     };
 
     new Chart(document.getElementById('gdpChart'), {
